@@ -5,6 +5,8 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>holberton-smiling</title>
+	<!-- Dynamical script -->
+	<script src="./script.js"></script>
 	<!-- Custom and Font Styles  -->
 	<link rel="stylesheet" href="styles.css" />
 	<link rel="stylesheet" href="font-style.css" />
@@ -105,7 +107,7 @@
 			<div class="container">
 
 				<!--Loader-->
-				<div id="loader-quotes" class="loader"></div>
+				<div id="quotes-loader" class="loader"></div>
 
 				<!--Quotes Controls-->
 				<div id="carouselExampleControls" class="carousel slide d-none" data-ride="carousel">
@@ -157,122 +159,8 @@
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
-
-			function createItem(cardsHTML, index) {
-				return `
-				<div class="carousel-item ${index === 0 ? 'active' : ''}">
-					${cardsHTML}
-					</div>
-					`;
-			}
-
-			function Quote() {
-				const loader = document.getElementById("loader-quotes");
-				const carousel = document.getElementById("carouselExampleControls");
-				const carouselInner = document.getElementById("carousel-quotes");
-
-				loader.classList.remove("d-none");
-
-				fetch("https://smileschool-api.hbtn.info/quotes")
-					.then((response) => response.json())
-					.then((quotes) => {
-						quotes.forEach((quote, index) => {
-							const activeClass = index === 0 ? "active" : "";
-
-							const carouselItem = `
-								<div class="carousel-item ${activeClass}">
-									<div class="row mx-auto align-items-center">
-										<div class="col-12 col-sm-2 col-lg-2 offset-lg-1 text-center">
-											<img src="${quote.pic_url}" class="d-block align-self-center rounded-circle" alt="${quote.name}" />
-										</div>
-										<div class="col-12 col-sm-7 offset-sm-2 col-lg-9 offset-lg-0">
-											<div class="quote-text">
-												<p class="text-white">« ${quote.text}</p>
-												<h4 class="text-white font-weight-bold">${quote.name}</h4>
-												<span class="text-white">${quote.title}</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							`;
-							carouselInner.insertAdjacentHTML("beforeend", carouselItem);
-						});
-
-						loader.classList.add("d-none");
-						carousel.classList.remove("d-none");
-					})
-					.catch((error) => {
-						console.error("Error fetching quotes:", error);
-						loader.innerHTML = "<p class='text-white'>Failed to load quotes. Please try again later.</p>";
-					});
-			}
-
-			function Video() {
-				const loader = document.getElementById("loader-videos");
-				const carousel = document.getElementById("carouselExampleControls2");
-				const carouselInner = document.getElementById("carousel-videos");
-
-				loader.classList.remove("d-none");
-
-				fetch("https://smileschool-api.hbtn.info/popular-tutorials")
-					.then(response => response.json())
-					.then(data => {
-						const cardsPerSlide = 4;
-						let slideContent = "";
-
-						data.forEach((video, index) => {
-							const cardHTML = `
-                    <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
-                        <div class="card video-card">
-                            <img src="${video.thumb_url}" class="card-img-top" alt="Video thumbnail" />
-                            <div class="card-img-overlay text-center">
-                                <img src="images/play.png" alt="Play" width="64px" class="align-self-center play-overlay" />
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title font-weight-bold">${video.title}</h5>
-                                <p class="card-text text-muted">${video['sub-title']}</p>
-                                <div class="creator d-flex align-items-center">
-                                    <img src="${video.author_pic_url}" alt="Creator" width="30px" class="rounded-circle" />
-                                    <h6 class="pl-3 m-0">${video.author}</h6>
-                                </div>
-                                <div class="info pt-3 d-flex justify-content-between">
-                                    <div class="rating">
-                                        ${[...Array(video.star)].map(() => `<img src="images/star_on.png" alt="star on" width="15px" />`).join('')}
-                                        ${[...Array(5 - video.star)].map(() => `<img src="images/star_off.png" alt="star off" width="15px" />`).join('')}
-                                    </div>
-                                    <span>${video.duration}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-							if (index % cardsPerSlide === 0) {
-								if (index > 0) {
-									slideContent += '</div></div>';
-								}
-								slideContent += `<div class="carousel-item ${index === 0 ? 'active' : ''}">
-                        <div class="row">`;
-							}
-							slideContent += cardHTML;
-							if (index === data.length - 1) {
-								slideContent += '</div></div>';
-							}
-						});
-
-						carouselInner.innerHTML = slideContent;
-
-						loader.classList.add("d-none");
-						carousel.classList.remove("d-none");
-					})
-					.catch(error => {
-						console.error("Error fetching videos", error);
-						loader.innerHTML = "<p class='text-white'>Failed to load videos. Please try again later.</p>";
-					});
-			}
-
-			Quote();
-			Video();
+			addQuotes();
+			addVideos();
 		});
 	</script>
 
